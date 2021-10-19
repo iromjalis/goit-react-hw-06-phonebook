@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import shortid from "shortid";
 // import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import { addContact } from "../../redux/phonebook/phonebook-actions.js";
 
 import css from "./ContactForm.module.css";
 import ContactFormName from "./ContactFormName";
@@ -26,9 +28,19 @@ class ContactForm extends Component {
     this.props.onSubmit(this.state);
     this.setState({ name: "", number: "" });
   };
+  handleAddContact = (e, { name, number }) => {
+    e.preventDefault();
+
+    const contact = {
+      name,
+      number,
+    };
+    addContact(contact);
+    // onAddContact();
+  };
   render() {
     return (
-      <form className={css.ContactFormWrapper} onSubmit={this.handleSubmit}>
+      <form className={css.ContactFormWrapper} onSubmit={this.handleAddContact}>
         <ContactFormName
           nameInputId={this.nameInputId}
           title="name"
@@ -54,4 +66,10 @@ ContactForm.defaultProps = {
   // bla: 'test',
 };
 
-export default ContactForm;
+const mapStateToProps = (state) => state;
+
+const mapDispatchToProps = (dispatch) => {
+  addContact: () => dispatch(addContact());
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ContactForm);
