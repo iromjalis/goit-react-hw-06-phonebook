@@ -1,35 +1,31 @@
-import React, { Component } from "react";
-// import PropTypes from "prop-types";
-//import { Test } from './Filter.styles';
+import React from "react";
+import { connect } from "react-redux";
+import { changeFilter } from "../../redux/phonebook/phonebook-actions.js";
 
-const Filter = ({ value, handleFilterChange }) => {
+const Filter = ({ filter, changeFilter }) => {
   return (
-    <div className="FilterWrapper">
-      <form action="">
-        <label htmlFor="">
-          <p> Find contacts by name</p>
-          <input
-            placeholder="Find contacts"
-            onChange={handleFilterChange}
-            type="text"
-            name="name"
-            value={value}
-            pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
-            title="Имя может состоять только из букв, апострофа, тире и пробелов. Например Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan и т. п."
-            required
-          />
-        </label>
-      </form>
-    </div>
+    <form action="">
+      <label htmlFor="">
+        <p> Find contacts by name</p>
+        <input
+          placeholder="Find contacts"
+          onChange={(e) => changeFilter(e.currentTarget.value)}
+          type="text"
+          name="name"
+          value={filter}
+          pattern="^[a-zA-Zа-яА-Я]+(([' -][a-zA-Zа-яА-Я ])?[a-zA-Zа-яА-Я]*)*$"
+          title="Имя может состоять только из букв, апострофа, тире и пробелов. Например Adrian, Jacob Mercer, Charles de Batz de Castelmore d'Artagnan и т. п."
+          required
+        />
+      </label>
+    </form>
   );
 };
 
-Filter.propTypes = {
-  // bla: PropTypes.string,
-};
+const mapStateToProps = ({ contacts: { filter } }) => ({ filter: filter });
 
-Filter.defaultProps = {
-  // bla: 'test',
-};
+const mapDispatchToProps = (dispatch) => ({
+  changeFilter: (value) => dispatch(changeFilter(value)),
+});
 
-export default Filter;
+export default connect(mapStateToProps, mapDispatchToProps)(Filter);
