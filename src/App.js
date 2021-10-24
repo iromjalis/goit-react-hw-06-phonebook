@@ -10,8 +10,8 @@ function App() {
       <Container className="App">
         <h1>Phonebook</h1>
         <ContactForm />
-        <Filter />
         <h2>Contacts:</h2>
+        <Filter />
         <ContactList />
       </Container>
     </>

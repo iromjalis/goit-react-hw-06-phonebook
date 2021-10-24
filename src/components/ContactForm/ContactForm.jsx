@@ -60,7 +60,9 @@ function ContactForm({ phonebookContacts, onSubmit }) {
         className="FormNumber"
       />
       <p>
-        <Button variant="outlined">Send</Button>
+        <Button variant="outlined" type="submit">
+          Send
+        </Button>
       </p>
     </form>
   );
