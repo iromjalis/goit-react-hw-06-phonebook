@@ -1,32 +1,39 @@
-import React, { Component } from "react";
-// import PropTypes from "prop-types";
-//import { Test } from './ContactList.styles';
+import React from "react";
+import { connect } from "react-redux";
+import { deleteContact } from "../../redux/phonebook/phonebook-actions.js";
 
-class ContactList extends Component {
-  render() {
-    const { handleDeleteContact } = this.props;
-    const { contacts } = this.props;
-    return (
-      <div className="ContactListWrapper">
-        {contacts.map(({ id, name, number }) => (
-          <li key={id}>
-            {name} {number}
-            <button type="button" onClick={() => handleDeleteContact(id)}>
-              Delete
-            </button>
-          </li>
-        ))}
-      </div>
-    );
-  }
-}
-
-ContactList.propTypes = {
-  // bla: PropTypes.string,
+const ContactList = ({ contacts, deleteContact }) => {
+  return (
+    <>
+      <ul>
+        {contacts &&
+          contacts.map(({ id, name, number }) => (
+            <li key={id}>
+              {name} {number}
+              <button type="button" onClick={() => deleteContact(id)}>
+                Delete
+              </button>
+            </li>
+          ))}
+      </ul>
+    </>
+  );
 };
 
-ContactList.defaultProps = {
-  // bla: 'test',
+const getVisibleContacts = (allContacts, filter) => {
+  const normalizedFilter = filter.toLowerCase();
+  return allContacts.filter((contact) =>
+    contact.name.toLowerCase().includes(normalizedFilter)
+  );
 };
+const mapStateToProps = ({
+  contacts: { phonebookContacts, phonebookFilter },
+}) => ({
+  contacts: getVisibleContacts(phonebookContacts, phonebookFilter),
+});
 
-export default ContactList;
+const mapDispatchToProps = (dispatch) => ({
+  deleteContact: (id) => dispatch(deleteContact(id)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(ContactList);
