@@ -1,8 +1,20 @@
-import { createReducer, combineReducers } from "@reduxjs/toolkit";
-import { addContact } from "./phonebook-actions.js";
+import { createReducer } from "@reduxjs/toolkit";
+import { combineReducers } from "redux";
+import {
+  addContact,
+  changeFilter,
+  deleteContact,
+} from "./phonebook-actions.js";
 
 const phonebookContacts = createReducer([], {
   [addContact]: (state, { payload }) => [...state, payload],
+  [deleteContact]: (state, { payload }) =>
+    state.filter((contact) => contact.id !== payload),
 });
-
-export const rootReducer = combineReducers({ phonebookContacts });
+const phonebookFilter = createReducer("", {
+  [changeFilter]: (_, { payload }) => payload,
+});
+export default combineReducers({
+  phonebookContacts,
+  phonebookFilter,
+});
