@@ -1,18 +1,25 @@
 import React from "react";
 import { connect } from "react-redux";
 import { deleteContact } from "../../redux/phonebook/phonebook-actions.js";
+import Button from "@mui/material/Button";
+import s from "./ContactList.module.css";
 
 const ContactList = ({ contacts, deleteContact }) => {
   return (
     <>
-      <ul>
+      <ul className={s.ContactList}>
         {contacts &&
           contacts.map(({ id, name, number }) => (
             <li key={id}>
               {name} {number}
-              <button type="button" onClick={() => deleteContact(id)}>
+              &ensp;
+              <Button
+                variant="outlined"
+                type="button"
+                onClick={() => deleteContact(id)}
+              >
                 Delete
-              </button>
+              </Button>
             </li>
           ))}
       </ul>

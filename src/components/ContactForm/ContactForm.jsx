@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import shortid from "shortid";
-// import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { addContact } from "../../redux/phonebook/phonebook-actions.js";
 
 import css from "./ContactForm.module.css";
 import ContactFormName from "./ContactFormName";
 import ContactFormNumber from "./ContactFormNumber";
+
+import Button from "@mui/material/Button";
 
 function ContactForm({ phonebookContacts, onSubmit }) {
   const [name, setName] = useState("");
@@ -35,6 +36,7 @@ function ContactForm({ phonebookContacts, onSubmit }) {
   //onSubmitForm
   const handleSubmit = (e) => {
     e.preventDefault();
+
     onSubmit(name, number);
 
     setName("");
@@ -48,14 +50,18 @@ function ContactForm({ phonebookContacts, onSubmit }) {
         title="name"
         value={name}
         onChange={handleChange}
+        className="FormName"
       />
       <ContactFormNumber
         numberInputId={numberInputId}
         title="number"
         value={number}
         onChange={handleChange}
+        className="FormNumber"
       />
-      <button type="submit">Send</button>
+      <p>
+        <Button variant="outlined">Send</Button>
+      </p>
     </form>
   );
 }
