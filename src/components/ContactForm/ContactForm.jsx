@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState } from "react";
 import shortid from "shortid";
 // import PropTypes from "prop-types";
 import { connect } from "react-redux";
@@ -8,68 +8,63 @@ import css from "./ContactForm.module.css";
 import ContactFormName from "./ContactFormName";
 import ContactFormNumber from "./ContactFormNumber";
 
-class ContactForm extends Component {
-  state = {
-    name: "",
-    number: "",
-  };
+function ContactForm({ phonebookContacts, onSubmit }) {
+  const [name, setName] = useState("");
+  const [number, setNumber] = useState("");
 
-  nameInputId = shortid.generate();
+  const nameInputId = shortid.generate();
+  const numberInputId = shortid.generate();
 
-  numberInputId = shortid.generate();
-  handleChange = (e) => {
+  //onChangeInput
+  const handleChange = (e) => {
     const { name, value } = e.target;
-    console.log(name, value);
-    this.setState({ [name]: value });
-  };
-  handleSubmit = (e) => {
-    e.preventDefault();
-    this.props.handleSubmit(this.state);
-    this.props.onSubmit(this.state);
-    this.setState({ name: "", number: "" });
-  };
-  handleAddContact = (e, { name, number }) => {
-    e.preventDefault();
 
-    const contact = {
-      name,
-      number,
-    };
-    addContact(contact);
-    // onAddContact();
+    switch (name) {
+      case "name":
+        setName(value);
+        break;
+
+      case "number":
+        setNumber(value);
+        break;
+
+      default:
+        return;
+    }
   };
-  render() {
-    return (
-      <form className={css.ContactFormWrapper} onSubmit={this.handleAddContact}>
-        <ContactFormName
-          nameInputId={this.nameInputId}
-          title="name"
-          value={this.state.name}
-          onChange={this.handleChange}
-        />
-        <ContactFormNumber
-          title="number"
-          value={this.state.number}
-          onChange={this.handleChange}
-        />
-        <button type="submit">Send</button>
-      </form>
-    );
-  }
+  //onSubmitForm
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onSubmit(name, number);
+
+    setName("");
+    setNumber("");
+  };
+
+  return (
+    <form className={css.ContactFormWrapper} onSubmit={handleSubmit}>
+      <ContactFormName
+        nameInputId={nameInputId}
+        title="name"
+        value={name}
+        onChange={handleChange}
+      />
+      <ContactFormNumber
+        numberInputId={numberInputId}
+        title="number"
+        value={number}
+        onChange={handleChange}
+      />
+      <button type="submit">Send</button>
+    </form>
+  );
 }
 
-ContactForm.propTypes = {
-  // bla: PropTypes.string,
-};
+const mapStateToProps = ({ contacts: { phonebookContacts } }) =>
+  phonebookContacts;
 
-ContactForm.defaultProps = {
-  // bla: 'test',
-};
-
-const mapStateToProps = (state) => state;
-
-const mapDispatchToProps = (dispatch) => {
-  addContact: () => dispatch(addContact());
-};
+const mapDispatchToProps = (dispatch) => ({
+  onSubmit: (name, number) => dispatch(addContact(name, number)),
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(ContactForm);
